@@ -1,11 +1,12 @@
-from rest_framework import viewsets, status
+from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Order, OrderItem
 from .serializers import OrderSerializer, OrderCreateSerializer
 from django.db import transaction
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                   mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Order.objects.all().prefetch_related('items', 'items__product')
     serializer_class = OrderSerializer
     

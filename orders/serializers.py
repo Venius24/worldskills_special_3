@@ -9,6 +9,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ['id', 'product', 'product_name', 'quantity', 'price']
+        read_only_fields = ['id', 'price']
     
     def validate_quantity(self, value):
         if value <= 0:
@@ -33,7 +34,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['customer', 'items']
-        read_only_fields = ['price']
     
     def create(self, validated_data):
         items_data = validated_data.pop('items')

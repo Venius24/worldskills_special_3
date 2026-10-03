@@ -1,9 +1,9 @@
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from .models import Product
 from datetime import date
-import base64
 
 class ProductModelTest(TestCase):
     def setUp(self):
@@ -29,8 +29,9 @@ class ProductModelTest(TestCase):
 class ProductAPITest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        credentials = base64.b64encode(b'staff:BCLyon2024').decode('utf-8')
-        self.client.credentials(HTTP_AUTHORIZATION=f'Basic {credentials}')
+        self.client.force_authenticate(
+            user=get_user_model().objects.create_user(username='staff')
+        )
         
         self.product_data = {
             'product_name': 'Багет',
